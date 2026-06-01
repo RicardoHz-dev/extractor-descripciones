@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.styles import Font, Border, Side, PatternFill, Alignment
 import pandas as pd
 import re
 
@@ -111,6 +113,46 @@ def procesar_lista(cuadros):
 
     return resultados
 
+def crear_excel_resultado(filas: list[dict], ruta_salida: str):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Comparacion"
+
+    fuente_header = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
+    fuente_normal = Font(name="Calibri", size=11)
+    borde_fino = Border(left=Side(style="thin", color="D3D3D3"), right=Side(style="thin", color="D3D3D3"),
+                        top=Side(style="thin", color="D3D3D3"), bottom=Side(style="thin", color="D3D3D3"))
+    relleno_header = PatternFill("solid", fgColor="1A237E")
+
+    anchos = {"A": 15, "B": 18, "C": 50, "D": 35, "E": 55}
+    for col, w in anchos.items(): ws.column_dimensions[col].width = w
+
+    encabezados = ["N° Cuadro", "Codigo de Serie", "Descripcion NS", "Categoria", "Nombre de la Serie"]
+    for idx, texto in enumerate(encabezados, 1):
+        c = ws.cell(row=1, column=idx, value=texto)
+        c.font, c.fill, c.border = fuente_header, relleno_header, borde_fino
+        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    ws.row_dimensions[1].height = 28
+    f_idx = 2
+
+    for item in filas:
+        datos = [
+            item.get("num_cuadro", item.get("N_CUADRO", "")), 
+            item.get("codigo_serie", item.get("CODIGO_SERIE", "")), 
+            item.get("descripcion", item.get("DESCRIPCION", "")), 
+            # item.get("bcrp_categoria", ""), 
+            # item.get("bcrp_nombre", "")
+        ]
+        for col_idx, val in enumerate(datos, 1):
+            celda = ws.cell(row=f_idx, column=col_idx, value=val)
+            celda.font, celda.border = fuente_normal, borde_fino
+            celda.alignment = Alignment(horizontal="center" if col_idx in [1,2] else "left", vertical="top", wrap_text=True)
+        f_idx += 1
+
+    ws.views.sheetView[0].showGridLines = True
+    ws.freeze_panes = "A2"
+    wb.save(ruta_salida)
+
 def guardar_resultado(resultados, nombre_archivo):
 
     if not resultados:
@@ -121,22 +163,17 @@ def guardar_resultado(resultados, nombre_archivo):
 
     ruta = Path("output") / nombre_archivo
 
-    df = pd.DataFrame(resultados)
-
-    df.to_excel(
-        ruta,
-        index=False
-    )
+    crear_excel_resultado(resultados, str(ruta))
 
     print(f"\nArchivo generado: {ruta}")
-    print(f"Registros: {len(df)}")
+    print(f"Registros: {len(resultados)}")
 
     escribir_log(
         f"Archivo generado: {ruta}"
     )
 
     escribir_log(
-        f"Total registros: {len(df)}"
+        f"Total registros: {len(resultados)}"
     )
 
 def procesar_todos():

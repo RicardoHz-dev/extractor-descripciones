@@ -3,6 +3,7 @@ from pathlib import Path
 from openpyxl import load_workbook
 import pandas as pd
 from logger import escribir_detalle
+from openpyxl.utils import get_column_letter
 
 
 
@@ -15,7 +16,8 @@ from logger import escribir_detalle
 # LETTER_RE = re.compile(r"^[a-z]\.", re.I)
 PN_RE = re.compile(r"(PN[A-Z0-9]+)", re.I)
 ROMAN_MAYOR_RE = re.compile(r'^[IVXLCDM]+\.',re.ASCII)
-NUM_RE = re.compile(r'^\d+\.')
+# NUM_RE = re.compile(r'^\d+(\.| )')
+NUM_RE = re.compile(r'^\d+')
 LETTER_RE = re.compile(r'^[a-z]\.')
 ROMAN_MINOR_RE = re.compile(r'^(i|ii|iii|iv|v|vi|vii|viii|ix|x)\.',re.I)
 
@@ -76,11 +78,21 @@ def es_continuacion(ws, fila, col_desc):
     if not texto:
         return False
 
-    # Si tiene PN, es descripción propia
+    texto_upper = texto.upper()
+
+    # NOTAS nunca son continuación
+    if texto_upper.startswith("NOTA"):
+        return False
+
+    # Las unidades deben quedar como hijos
+    if texto.startswith("("):
+        return False
+
+    # Si tiene PN es una descripción propia
     if obtener_pn(cell):
         return False
 
-    # Si tiene hyperlink aunque no tenga PN
+    # Si tiene hyperlink es descripción propia
     if tiene_hyperlink(cell):
         return False
 
@@ -88,87 +100,307 @@ def es_continuacion(ws, fila, col_desc):
     if tiene_datos(ws, fila, col_desc):
         return False
 
-    # Si inicia una nueva jerarquía
-    if obtener_nivel(texto) <= 4:
+    nivel = obtener_nivel(texto)
+
+    # Nueva jerarquía real
+    if nivel in (1, 2, 3, 4):
         return False
 
     return True
 
 
-def obtener_descripcion_completa(ws, fila, col_desc, filas_consumidas):
-    partes = []
-    texto = limpiar(ws.cell(fila, col_desc).value)
+def detectar_columna_descripciones(ws):
 
-    partes.append(texto)
+    mejor_col = None
+    mejor_score = 0
+
+    # Revisar primeras 15 columnas
+    for col in range(1, min(ws.max_column, 15) + 1):
+
+        score = 0
+
+        for fila in range(1, ws.max_row + 1):
+
+            texto = limpiar(
+                ws.cell(fila, col).value
+            )
+
+            if not texto:
+                continue
+
+            # Tiene datos numéricos a la derecha
+            if tiene_datos(ws, fila, col):
+                score += 1
+
+            # Tiene hyperlink
+            if obtener_pn(ws.cell(fila, col)):
+                score += 5
+
+        if score > mejor_score:
+            mejor_score = score
+            mejor_col = col
+
+    return mejor_col
+
+
+def construir_descripciones(ws, col_desc):
+
+    descripciones = []
+
+    stack = []
+    filas_consumidas = set()
+
+    for fila in range(1, ws.max_row + 1):
+
+        if fila in filas_consumidas:
+            continue
+
+        texto = limpiar(
+            ws.cell(fila, col_desc).value
+        )
+
+        if not texto:
+            continue
+
+        texto_completo = obtener_descripcion_completa(
+            ws,
+            fila,
+            col_desc,
+            filas_consumidas
+        )
+
+        descripcion = construir_jerarquia(
+            texto_completo,
+            stack
+        )
+
+        pn = obtener_pn(
+            ws.cell(fila, col_desc)
+        )
+
+        tiene_data = tiene_datos(
+            ws,
+            fila,
+            col_desc
+        )
+
+        descripciones.append({
+            "fila": fila,
+            "pn": pn,
+            "tiene_datos": tiene_data,
+            "descripcion": descripcion
+        })
+
+    return descripciones
+
+def obtener_descripcion_completa(
+    ws,
+    fila,
+    col_desc,
+    filas_consumidas,
+    texto_base=None
+):
+
+    if texto_base:
+        partes = [texto_base]
+    else:
+        partes = [
+            limpiar(
+                ws.cell(fila, col_desc).value
+            )
+        ]
+
     fila_actual = fila + 1
 
     while fila_actual <= ws.max_row:
-        if not es_continuacion(ws, fila_actual, col_desc):
+
+        cell_sig = ws.cell(
+            fila_actual,
+            col_desc
+        )
+
+        texto = limpiar(
+            cell_sig.value
+        )
+
+        if es_continuacion_encabezado(
+            ws,
+            fila_actual,
+            col_desc
+        ):
+            partes.append(texto)
+
+            filas_consumidas.add(
+                fila_actual
+            )
+
+            fila_actual += 1
+
+            continue
+
+        if not texto:
+            fila_actual += 1
+            continue
+
+        # ------------------------------------------------
+        # SI LA SIGUIENTE FILA TIENE PN
+        # ES UNA DESCRIPCIÓN NUEVA
+        # ------------------------------------------------
+
+        if obtener_pn(cell_sig):
             break
 
-        texto_extra = limpiar(ws.cell(fila_actual, col_desc).value)
-        partes.append(texto_extra)
-        filas_consumidas.add(fila_actual)
+        # ------------------------------------------------
+        # SI TIENE DATOS
+        # ES UNA DESCRIPCIÓN NUEVA
+        # ------------------------------------------------
+
+        if tiene_datos(
+            ws,
+            fila_actual,
+            col_desc
+        ):
+            break
+
+        nivel = obtener_nivel(texto)
+
+        if nivel != 5:
+            break
+
+        partes.append(texto)
+
+        filas_consumidas.add(
+            fila_actual
+        )
+
         fila_actual += 1
 
-    return " ".join(partes)
-# =====================================================
-# JERARQUIA
-# =====================================================
+    descripcion = " ".join(partes)
 
-# def obtener_nivel(texto):
-#     texto = texto.strip()
+    descripcion = re.sub(
+        r"\bNota:\s*",
+        "",
+        descripcion,
+        flags=re.I
+    )
 
-#     if ROMAN_RE.match(texto):
-#         return 1
+    descripcion = re.sub(
+        r"\s+",
+        " ",
+        descripcion
+    ).strip()
 
-#     if NUM_RE.match(texto):
-#         return 2
+    return descripcion
 
-#     if LETTER_RE.match(texto):
-#         return 3
-
-#     return 4
 
 
 def obtener_nivel(texto):
+
     texto = texto.strip()
 
-    # I. II. III. IV.
     if ROMAN_MAYOR_RE.match(texto):
-        if texto.startswith(("i.", "ii.", "iii.", "iv.", "v.")):
-            pass
-        else:
-            return 1
+        return 1
 
-    # 1. 2. 3.
     if NUM_RE.match(texto):
         return 2
 
-    # a. b. c.
     if LETTER_RE.match(texto):
-        if ROMAN_MINOR_RE.match(texto):
-            pass
-        else:
-            return 3
+        return 3
 
-    # i. ii. iii.
     if ROMAN_MINOR_RE.match(texto):
         return 4
 
-    # textos auxiliares
     return 5
 
+
 def construir_jerarquia(texto, stack):
+
     nivel = obtener_nivel(texto)
+
+    if nivel == 5:
+
+        if stack:
+            return (
+                " > ".join(
+                    item["texto"]
+                    for item in stack
+                )
+                + " > "
+                + texto
+            )
+
+        return texto
 
     while stack and stack[-1]["nivel"] >= nivel:
         stack.pop()
 
-    stack.append({"nivel": nivel,"texto": texto})
+    stack.append({
+        "nivel": nivel,
+        "texto": texto
+    })
 
-    return " > ".join(item["texto"] for item in stack)
+    return " > ".join(
+        item["texto"]
+        for item in stack
+    )
 
+def obtener_descripcion_hacia_arriba(
+    ws,
+    fila,
+    col_desc
+):
+
+    texto_actual = limpiar(
+        ws.cell(fila, col_desc).value
+    )
+
+    if not texto_actual:
+        return ""
+
+    # Solo aplica para filas auxiliares
+    if obtener_nivel(texto_actual) != 5:
+        return texto_actual
+
+    if fila <= 1:
+        return texto_actual
+
+    texto_arriba = limpiar(
+        ws.cell(fila - 1, col_desc).value
+    )
+
+    if not texto_arriba:
+        return texto_actual
+
+    if obtener_nivel(texto_arriba) == 1:
+        return (
+            texto_arriba
+            + " "
+            + texto_actual
+        )
+
+    return texto_actual
+
+
+def es_continuacion_encabezado(ws, fila, col_desc):
+
+    if fila <= 1:
+        return False
+
+    texto = limpiar(
+        ws.cell(fila, col_desc).value
+    )
+
+    if obtener_nivel(texto) != 5:
+        return False
+
+    texto_arriba = limpiar(
+        ws.cell(fila - 1, col_desc).value
+    )
+
+    if not texto_arriba:
+        return False
+
+    return obtener_nivel(texto_arriba) == 1
 
 # =====================================================
 # VALIDACION
@@ -213,23 +445,74 @@ def procesar_horizontal(ruta_excel):
 
     filas_consumidas = set()
 
-    col_desc = 2  # Columna B
+    # col_desc = 2  # Columna B
+    col_desc = detectar_columna_descripciones(ws)
+
+    if not col_desc:
+        raise Exception(
+            "No se pudo detectar columna de descripciones"
+        )
+
+    print(
+        f"Columna detectada: "
+        f"{get_column_letter(col_desc)}"
+    )
+
+    escribir_detalle(
+        f"CUADRO={numero_cuadro} | "
+        f"COLUMNA_DESC={get_column_letter(col_desc)}"
+    )
 
     print(f"\nProcesando cuadro {numero_cuadro}")
 
     for fila in range(1, ws.max_row + 1):
 
-        # Saltar filas que ya fueron
-        # utilizadas como continuación
         if fila in filas_consumidas:
             continue
 
         cell = ws.cell(fila, col_desc)
 
+        if es_continuacion_encabezado(
+            ws,
+            fila,
+            col_desc
+        ):
+            continue
+
         texto = limpiar(cell.value)
 
         if not texto:
             continue
+
+        if texto.upper().startswith("NOTA"):
+            continue
+
+        # ==================================
+        # CONSTRUIR JERARQUÍA SIEMPRE
+        # ==================================
+
+        texto_completo = obtener_descripcion_hacia_arriba(
+            ws,
+            fila,
+            col_desc
+        )
+
+        texto_completo = obtener_descripcion_completa(
+            ws,
+            fila,
+            col_desc,
+            filas_consumidas,
+            texto_base=texto_completo
+        )
+
+        descripcion = construir_jerarquia(
+            texto_completo,
+            stack
+        )
+
+        # ==================================
+        # VALIDAR RECIÉN AL FINAL
+        # ==================================
 
         tiene_serie = tiene_datos(
             ws,
@@ -239,35 +522,15 @@ def procesar_horizontal(ruta_excel):
 
         pn = obtener_pn(cell)
 
-        # Si no tiene datos ni PN,
-        # probablemente no sea descripción válida
         if not tiene_serie and not pn:
             continue
 
-        # ==================================================
-        # UNIR DESCRIPCIONES PARTIDAS
-        # ==================================================
-
-        texto_completo = obtener_descripcion_completa(
-            ws,
-            fila,
-            col_desc,
-            filas_consumidas
-        )
-
-        # ==================================================
-        # CONSTRUIR JERARQUÍA
-        # ==================================================
-
-        descripcion = construir_jerarquia(
-            texto_completo,
-            stack
-        )
-
         resultados.append({
-            "N_CUADRO": f"cuadro-{numero_cuadro}",
-            "CODIGO_SERIE": pn,
-            "DESCRIPCION": descripcion
+            "num_cuadro": f"cuadro-{numero_cuadro}",
+            "codigo_serie": pn,
+            "descripcion": descripcion,
+            # "bcrp_categoria": "",
+            # "bcrp_nombre": ""
         })
 
         escribir_detalle(
@@ -288,7 +551,6 @@ def procesar_horizontal(ruta_excel):
     )
 
     return resultados
-
 
 # =====================================================
 # PROCESAR TODOS LOS HORIZONTALES
@@ -344,3 +606,9 @@ if __name__ == "__main__":
         )
     elif opcion == "2":
         procesar_carpeta()
+
+#     print(
+#     obtener_nivel(
+#         "II. ACTIVOS EXTERNOS NETOS DE LARGO PLAZO"
+#     )
+# )
