@@ -1,7 +1,0 @@
-============================================================
-INICIO: 2026-06-01 17:59:22.437373
-============================================================
-[011] Inicio
-[011] OK - 37 registros
-Archivo generado: output\resultado_personalizado.xlsx
-Total registros: 37

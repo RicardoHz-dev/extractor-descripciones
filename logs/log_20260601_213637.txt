@@ -1,5 +1,5 @@
 ============================================================
-INICIO: 2026-05-31 22:06:55.774801
+INICIO: 2026-06-01 21:36:37.739000
 ============================================================
 [001] Inicio
 [001] OK - 25 registros
@@ -42,13 +42,13 @@ INICIO: 2026-05-31 22:06:55.774801
 [020] Inicio
 [020] Cruzado - OMITIDO
 [021] Inicio
-[021] OK - 36 registros
+[021] OK - 35 registros
 [022] Inicio
 [022] Vertical - OMITIDO
 [023] Inicio
-[023] OK - 26 registros
+[023] OK - 25 registros
 [024] Inicio
-[024] OK - 38 registros
+[024] OK - 37 registros
 [025] Inicio
 [025] Vertical - OMITIDO
 [026] Inicio
@@ -56,7 +56,7 @@ INICIO: 2026-05-31 22:06:55.774801
 [027] Inicio
 [027] Vertical - OMITIDO
 [028] Inicio
-[028] OK - 15 registros
+[028] OK - 16 registros
 [029] Inicio
 [029] Vertical - OMITIDO
 [030] Inicio
@@ -140,7 +140,7 @@ INICIO: 2026-05-31 22:06:55.774801
 [069] Inicio
 [069] OK - 61 registros
 [070] Inicio
-[070] OK - 0 registros
+[070] OK - 73 registros
 [071] Inicio
 [071] OK - 24 registros
 [072] Inicio
@@ -206,7 +206,7 @@ INICIO: 2026-05-31 22:06:55.774801
 [102] Inicio
 [102] OK - 61 registros
 [103] Inicio
-[103] OK - 0 registros
+[103] OK - 72 registros
 [104] Inicio
 [104] OK - 24 registros
 [105] Inicio
@@ -254,4 +254,7 @@ INICIO: 2026-05-31 22:06:55.774801
 [126] Inicio
 [126] Vertical - OMITIDO
 Archivo generado: output\resultado_todos.xlsx
-Total registros: 1893
+Total registros: 2036
+============================================================
+FIN: 2026-06-01 21:52:34.235655
+============================================================

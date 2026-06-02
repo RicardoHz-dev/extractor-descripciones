@@ -1,0 +1,44 @@
+============================================================
+INICIO: 2026-06-01 21:52:38.741678
+============================================================
+[001] Inicio
+[001] OK - 25 registros
+[002] Inicio
+[002] Vertical - OMITIDO
+[003] Inicio
+[003] Vertical - OMITIDO
+[004] Inicio
+[004] Cruzado - OMITIDO
+[005] Inicio
+[005] Cruzado - OMITIDO
+[006] Inicio
+[006] Vertical - OMITIDO
+[007] Inicio
+[007] Vertical - OMITIDO
+[008] Inicio
+[008] Vertical - OMITIDO
+[009] Inicio
+[009] Cruzado - OMITIDO
+[010] Inicio
+[010] Vertical - OMITIDO
+[011] Inicio
+[011] OK - 38 registros
+[012] Inicio
+[012] Vertical - OMITIDO
+[013] Inicio
+[013] Vertical - OMITIDO
+[014] Inicio
+[014] Cruzado - OMITIDO
+[015] Inicio
+[015] Cruzado - OMITIDO
+[016] Inicio
+[016] Cruzado - OMITIDO
+[017] Inicio
+[017] Vertical - OMITIDO
+[018] Inicio
+[018] Cruzado - OMITIDO
+[019] Inicio
+[019] Cruzado - OMITIDO
+[020] Inicio
+[020] Cruzado - OMITIDO
+[021] Inicio

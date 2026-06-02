@@ -1,0 +1,267 @@
+============================================================
+INICIO: 2026-06-01 21:56:34.006382
+============================================================
+[001] Inicio
+[001] OK - 25 registros
+[011] Inicio
+[011] OK - 38 registros
+[070] Inicio
+[070] OK - 71 registros
+[103] Inicio
+[103] OK - 71 registros
+Archivo generado: output\resultado_personalizado.xlsx
+Total registros: 205
+[001] Inicio
+[001] OK - 25 registros
+[002] Inicio
+[002] Vertical - OMITIDO
+[003] Inicio
+[003] Vertical - OMITIDO
+[004] Inicio
+[004] Cruzado - OMITIDO
+[005] Inicio
+[005] Cruzado - OMITIDO
+[006] Inicio
+[006] Vertical - OMITIDO
+[007] Inicio
+[007] Vertical - OMITIDO
+[008] Inicio
+[008] Vertical - OMITIDO
+[009] Inicio
+[009] Cruzado - OMITIDO
+[010] Inicio
+[010] Vertical - OMITIDO
+[011] Inicio
+[011] OK - 38 registros
+[012] Inicio
+[012] Vertical - OMITIDO
+[013] Inicio
+[013] Vertical - OMITIDO
+[014] Inicio
+[014] Cruzado - OMITIDO
+[015] Inicio
+[015] Cruzado - OMITIDO
+[016] Inicio
+[016] Cruzado - OMITIDO
+[017] Inicio
+[017] Vertical - OMITIDO
+[018] Inicio
+[018] Cruzado - OMITIDO
+[019] Inicio
+[019] Cruzado - OMITIDO
+[020] Inicio
+[020] Cruzado - OMITIDO
+[021] Inicio
+[021] OK - 35 registros
+[022] Inicio
+[022] Vertical - OMITIDO
+[023] Inicio
+[023] OK - 25 registros
+[024] Inicio
+[024] OK - 37 registros
+[025] Inicio
+[025] Vertical - OMITIDO
+[026] Inicio
+[026] Vertical - OMITIDO
+[027] Inicio
+[027] Vertical - OMITIDO
+[028] Inicio
+[028] OK - 16 registros
+[029] Inicio
+[029] Vertical - OMITIDO
+[030] Inicio
+[030] Vertical - OMITIDO
+[031] Inicio
+[031] Vertical - OMITIDO
+[032] Inicio
+[032] Vertical - OMITIDO
+[033] Inicio
+[033] Vertical - OMITIDO
+[034] Inicio
+[034] Cruzado - OMITIDO
+[035] Inicio
+[035] Vertical - OMITIDO
+[036] Inicio
+[036] Vertical - OMITIDO
+[037] Inicio
+[037] Vertical - OMITIDO
+[038] Inicio
+[038] Vertical - OMITIDO
+[039] Inicio
+[039] Vertical - OMITIDO
+[040] Inicio
+[040] Vertical - OMITIDO
+[041] Inicio
+[041] Vertical - OMITIDO
+[042] Inicio
+[042] Vertical - OMITIDO
+[043] Inicio
+[043] Vertical - OMITIDO
+[044] Inicio
+[044] Vertical - OMITIDO
+[045] Inicio
+[045] Vertical - OMITIDO
+[046] Inicio
+[046] Vertical - OMITIDO
+[047] Inicio
+[047] Vertical - OMITIDO
+[048] Inicio
+[048] Vertical - OMITIDO
+[049] Inicio
+[049] OK - 29 registros
+[050] Inicio
+[050] OK - 29 registros
+[051] Inicio
+[051] Cruzado - OMITIDO
+[052] Inicio
+[052] Cruzado - OMITIDO
+[053] Inicio
+[053] Cruzado - OMITIDO
+[054] Inicio
+[054] OK - 20 registros
+[055] Inicio
+[055] OK - 9 registros
+[056] Inicio
+[056] OK - 9 registros
+[057] Inicio
+[057] OK - 18 registros
+[058] Inicio
+[058] OK - 31 registros
+[059] Inicio
+[059] OK - 33 registros
+[060] Inicio
+[060] OK - 22 registros
+[061] Inicio
+[061] OK - 38 registros
+[062] Inicio
+[062] Vertical - OMITIDO
+[063] Inicio
+[063] OK - 23 registros
+[064] Inicio
+[064] OK - 24 registros
+[065] Inicio
+[065] OK - 10 registros
+[066] Inicio
+[066] OK - 17 registros
+[067] Inicio
+[067] OK - 25 registros
+[068] Inicio
+[068] OK - 52 registros
+[069] Inicio
+[069] OK - 61 registros
+[070] Inicio
+[070] OK - 71 registros
+[071] Inicio
+[071] OK - 24 registros
+[072] Inicio
+[072] Vertical - OMITIDO
+[073] Inicio
+[073] Vertical - OMITIDO
+[074] Inicio
+[074] Vertical - OMITIDO
+[075] Inicio
+[075] OK - 23 registros
+[076] Inicio
+[076] OK - 23 registros
+[077] Inicio
+[077] OK - 31 registros
+[078] Inicio
+[078] OK - 14 registros
+[079] Inicio
+[079] OK - 15 registros
+[080] Inicio
+[080] OK - 63 registros
+[081] Inicio
+[081] OK - 63 registros
+[082] Inicio
+[082] OK - 63 registros
+[083] Inicio
+[083] Vertical - OMITIDO
+[084] Inicio
+[084] Vertical - OMITIDO
+[085] Inicio
+[085] OK - 21 registros
+[086] Inicio
+[086] OK - 15 registros
+[087] Inicio
+[087] OK - 25 registros
+[088] Inicio
+[088] OK - 25 registros
+[089] Inicio
+[089] OK - 24 registros
+[090] Inicio
+[090] OK - 24 registros
+[091] Inicio
+[091] OK - 30 registros
+[092] Inicio
+[092] OK - 12 registros
+[093] Inicio
+[093] OK - 12 registros
+[094] Inicio
+[094] OK - 23 registros
+[095] Inicio
+[095] OK - 22 registros
+[096] Inicio
+[096] OK - 19 registros
+[097] Inicio
+[097] OK - 27 registros
+[098] Inicio
+[098] OK - 28 registros
+[099] Inicio
+[099] OK - 17 registros
+[100] Inicio
+[100] OK - 25 registros
+[101] Inicio
+[101] OK - 52 registros
+[102] Inicio
+[102] OK - 61 registros
+[103] Inicio
+[103] OK - 71 registros
+[104] Inicio
+[104] OK - 24 registros
+[105] Inicio
+[105] OK - 27 registros
+[106] Inicio
+[106] OK - 18 registros
+[107] Inicio
+[107] OK - 17 registros
+[108] Inicio
+[108] OK - 25 registros
+[109] Inicio
+[109] OK - 16 registros
+[110] Inicio
+[110] OK - 21 registros
+[111] Inicio
+[111] OK - 22 registros
+[112] Inicio
+[112] Vertical - OMITIDO
+[113] Inicio
+[113] OK - 15 registros
+[114] Inicio
+[114] OK - 16 registros
+[115] Inicio
+[115] OK - 15 registros
+[116] Inicio
+[116] OK - 16 registros
+[117] Inicio
+[117] OK - 21 registros
+[118] Inicio
+[118] OK - 20 registros
+[119] Inicio
+[119] OK - 25 registros
+[120] Inicio
+[120] OK - 25 registros
+[121] Inicio
+[121] OK - 24 registros
+[122] Inicio
+[122] OK - 24 registros
+[123] Inicio
+[123] OK - 65 registros
+[124] Inicio
+[124] OK - 48 registros
+[125] Inicio
+[125] Vertical - OMITIDO
+[126] Inicio
+[126] Vertical - OMITIDO
+Archivo generado: output\resultado_todos.xlsx
+Total registros: 2033
